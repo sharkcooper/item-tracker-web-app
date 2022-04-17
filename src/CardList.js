@@ -24,18 +24,16 @@ class CardList extends React.Component {
             cards.push(this.generateCard(i))
         }
         
-        return (
-            <div className={'cardList'}>
-                {cards}
-            </div>
-        )
+        return cards
     }
 
     render() {
-        let cards = this.generateCards()
         return (
-            <div>
-                {cards}
+            <div className='cardList'>
+                <div className='headerRow'>
+                    <button className='addCardButton'>Add Card</button>
+                </div>
+                {this.generateCards()}
             </div>
         )
     }
