@@ -8,9 +8,15 @@ export default function AddCardOverlay({open, children, onClose}) {
         <>
             <div className="overlayBackground"></div>
             <div className="overlayForm">
-                <button className="overlayButton" onClick={onClose}>X</button>
-                {children}
-                <button className="overlayButton">Save</button>
+                <div className="overlayButtonContainer">
+                    <button className="overlayButton" onClick={onClose}>X</button>
+                </div>
+                <div className="overlayContentContainer">
+                    {children}
+                </div>
+                <div className="overlayButtonContainer">
+                    <button className="overlayButton">Save</button>
+                </div>
             </div>
         </>
         
