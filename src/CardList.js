@@ -1,13 +1,21 @@
 import React from 'react';
 import Card from './Card.js'
+import AddCardOverlay from './AddCardOverlay.js'
 import './CardList.css'
 
 class CardList extends React.Component {
     constructor(props) {
         super()
         this.state = {
+            isOverlayOpen: false,
             numCards: 3,
         }
+    }
+
+    setIsOverlayOpen(value) {
+        this.setState({
+            isOverlayOpen: value,
+        })
     }
 
     generateCard(i) {
@@ -31,9 +39,12 @@ class CardList extends React.Component {
         return (
             <div className='cardList'>
                 <div className='headerRow'>
-                    <button className='addCardButton'>Add Card</button>
+                    <button className='addCardButton' onClick={() => this.setIsOverlayOpen(true)}>Add Card</button>
                 </div>
                 {this.generateCards()}
+                <AddCardOverlay open={this.state.isOverlayOpen} onClose={() => this.setIsOverlayOpen(false)}>
+                    Overlay!
+                </AddCardOverlay>
             </div>
         )
     }
