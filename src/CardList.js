@@ -42,9 +42,7 @@ class CardList extends React.Component {
                     <button className='addCardButton' onClick={() => this.setIsOverlayOpen(true)}>Add Card</button>
                 </div>
                 {this.generateCards()}
-                <AddCardOverlay open={this.state.isOverlayOpen} onClose={() => this.setIsOverlayOpen(false)}>
-                    Overlay!
-                </AddCardOverlay>
+                <AddCardOverlay open={this.state.isOverlayOpen} onClose={() => this.setIsOverlayOpen(false)}/>
             </div>
         )
     }
