@@ -3,15 +3,14 @@ import { useState } from "react"
 import "./AddCardOverlay.css"
 
 function addCardItem(cardItems, setCardItems) {
-    cardItems.push(<CardItem key={cardItems.length}>
-        <lable className="cardItemLabel">Label Name</lable>
-        <input >Label Name</input>
-        <label className="cardItemLabel"/>
-        <input >XPath</input>
-    </CardItem>)
-    console.log(cardItems)
-    setCardItems(cardItems)
-    console.log(cardItems)
+    const oldItems = cardItems.slice()
+    const newItem = <CardItem key={cardItems.length}>
+                        <label className="cardItemLabel">Card Item Name</label>
+                        <input className="labelName"/>
+                        <label className="cardItemLabel">HTML XPath</label>
+                        <input className="xpath"/>
+                    </CardItem>
+    setCardItems(oldItems.concat(newItem))
 }
 
 function CardItem({children}) {
@@ -35,6 +34,8 @@ export default function AddCardOverlay({open, onClose}) {
             </CardItem>
         ])
     }
+
+    console.log(cardItems)
 
     return (
         <>
