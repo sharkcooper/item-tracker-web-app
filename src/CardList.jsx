@@ -1,12 +1,14 @@
 import React from 'react';
 import Card from './Card.jsx'
 import AddCardOverlay from './AddCardOverlay.jsx'
+import { makeKey } from './tools.js'
 import './CardList.css'
 
 class CardList extends React.Component {
     constructor(props) {
-        super()
+        super(props)
         this.state = {
+            cards: [],
             isOverlayOpen: false,
             numCards: 3,
         }
@@ -18,21 +20,19 @@ class CardList extends React.Component {
         })
     }
 
-    generateCard(i) {
-        return (
-            <Card
-                key={i}
-            />
-        )
-    } 
+    addCard(title, url, entries) {
+        const userInput = entries.map((entry) => ({
+            labelText: entry.labelRef.current.value,
+            inputText: entry.inputRef.current.value
+        }))
 
-    generateCards() {
-        let cards = new Array()
-        for (let i = 0; i < this.state.numCards; i++) {
-            cards.push(this.generateCard(i))
-        }
-        
-        return cards
+        const card = <Card key={makeKey()} title={title} url={url} entries={userInput}/>
+
+        const oldCards = this.state.cards.slice()
+        this.setState({
+            cards: oldCards.concat(card)
+        })
+
     }
 
     render() {
@@ -41,8 +41,8 @@ class CardList extends React.Component {
                 <div className='headerRow'>
                     <button className='addCardButton' onClick={() => this.setIsOverlayOpen(true)}>Add Card</button>
                 </div>
-                {this.generateCards()}
-                <AddCardOverlay open={this.state.isOverlayOpen} onClose={() => this.setIsOverlayOpen(false)}/>
+                {this.state.cards}
+                <AddCardOverlay open={this.state.isOverlayOpen} onClose={() => this.setIsOverlayOpen(false)} addCard={(title, url, entries) => this.addCard(title, url, entries)}/>
             </div>
         )
     }
