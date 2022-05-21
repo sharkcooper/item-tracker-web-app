@@ -27,11 +27,15 @@
     align-items: center;
 }
 
-.detailsContainer {
+.itemList {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.itemContainer {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .expandButton {
@@ -55,7 +59,7 @@
     color: white;
 }
 
-.statusContainer {
+.labelContainer {
     height: fit-content;
     width: fit-content;
     background-color: darkgreen;

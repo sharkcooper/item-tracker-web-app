@@ -1,10 +1,14 @@
 import React from 'react';
+import { makeKey } from './tools.js';
 import './Card.css'
 
 class Card extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            title: props.title,
+            url: props.url,
+            entries: props.entries,
             expanded: false,
         }
     }
@@ -13,14 +17,12 @@ class Card extends React.Component {
         this.setState({
             expanded: !this.state.expanded,
         })
-        console.log("expanded state is now:")
-        console.log(this.state.expanded)
     }
 
     createTitle() {
         return (
             <div className='titleContainer'>
-                <p className='cardTitle leftCardItem'>Sample Title</p>
+                <p className='cardTitle leftCardItem'>{this.state.title}</p>
                 {
                     this.state.expanded ? 
                         <button className='expandButton rightCardItem' onClick={() => this.toggleExpand()}>-</button> :
@@ -30,29 +32,24 @@ class Card extends React.Component {
         )
     }
 
-    createDetailsArea() {
-        if (this.state.expanded){
-            return (
-                <div className='detailsContainer'>
-                    {this.createAvailability()}
-                    {this.createPrice()}
-                </div>
-            )
-        }
-    }
+    createItemArea() {
+        if (!this.state.expanded)
+            return null
 
-    createAvailability() {
-        return (
-            <div className='availabilityContainer statusContainer leftCardItem'>
-                <p className='availability'>Sample Availability</p>
+        let entries = this.state.entries.map((entry) => (
+            <div key={makeKey()} className="itemContainer">
+                <div className="labelContainer leftCardItem">{entry.labelText}</div>
+                <div className="valueContainer leftCardItem">{entry.inputText}</div>
             </div>
-        )
-    }
+        ))
 
-    createPrice() {
         return (
-            <div className='priceContainer statusContainer rightCardItem'>
-                <p className='price'>Sample Price</p>
+            <div className='itemList'>
+                <div key={makeKey()} className="itemContainer">
+                    <div className="labelContainer leftCardItem">URL</div>
+                    <div className="valueContainer leftCardItem">{this.state.url}</div>
+                </div>
+                {entries}
             </div>
         )
     }
@@ -61,7 +58,7 @@ class Card extends React.Component {
         return (
             <div className='card'>
                 {this.createTitle()}
-                {this.createDetailsArea()}
+                {this.createItemArea()}
             </div>
         )
     }
