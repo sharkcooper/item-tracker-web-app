@@ -1,6 +1,6 @@
 import React from 'react';
-import Card from './Card.js'
-import AddCardOverlay from './AddCardOverlay.js'
+import Card from './Card.jsx'
+import AddCardOverlay from './AddCardOverlay.jsx'
 import './CardList.css'
 
 class CardList extends React.Component {
