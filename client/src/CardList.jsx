@@ -26,13 +26,27 @@ class CardList extends React.Component {
             inputText: entry.inputRef.current.value
         }))
 
-        const card = <Card key={makeKey()} title={title} url={url} entries={userInput}/>
-
+        const card = {
+            title: title,
+            url: url,
+            entries: userInput
+        }        
         const oldCards = this.state.cards.slice()
         this.setState({
             cards: oldCards.concat(card)
         })
 
+    }
+
+    getCards() {
+        const cardComponents = []
+        const curCards = this.state.cards.slice()
+        
+        curCards.forEach(element => {
+            cardComponents.push(<Card key={makeKey()} title={element.title} url={element.url} entries={element.entries}/>)
+        })
+
+        return cardComponents
     }
 
     render() {
@@ -41,7 +55,7 @@ class CardList extends React.Component {
                 <div className='headerRow'>
                     <button className='addCardButton' onClick={() => this.setIsOverlayOpen(true)}>Add Card</button>
                 </div>
-                {this.state.cards}
+                {this.getCards()}
                 <AddCardOverlay open={this.state.isOverlayOpen} onClose={() => this.setIsOverlayOpen(false)} addCard={(title, url, entries) => this.addCard(title, url, entries)}/>
             </div>
         )
