@@ -1,5 +1,5 @@
-## How to Build Noti
+## How to Build
 npm run build
 
-## How to Run Noti
+## How to Run
 npm run dev
