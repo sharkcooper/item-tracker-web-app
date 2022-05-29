@@ -42,42 +42,50 @@ function getCardItems(card) {
     return new Promise((resolve, reject) => {
         const sqlGetCardItems = "select * from card_items where card_id=?"
         db.query(sqlGetCardItems, [card.card_id], (err, result) => {
-            if (err)
-                reject(err)
-            
-            // Create card
-            let newCard = {
-                title: card.title,
-                url: card.url,
-                entries: [],
-            }
-
-            for (const item of result) {
-                newCard.entries.push({
-                    labelText: item.label,
-                    inputText: item.xpath,
-                })
-            }
-            resolve(newCard)
+            if (err) reject(err)
+            resolve(result)
         })
     })
 }
 
-function makeCards(cardTitlesAndUrls) {
+function getAllCardItems(cardTitlesAndUrls) {
     return new Promise(async (resolve, reject) => {
-        let cards = []
+        let cardItems = []
         for (const element of cardTitlesAndUrls) {
-            const card = await getCardItems(element)
-            cards.push(card)
+            const items = await getCardItems(element)
+            cardItems.push(items)
         }
-        console.log(cards)
-        resolve(cards)
+        console.log(cardItems)
+        resolve(cardItems)
     })
 }
 
+function makeCards(cardTitlesAndUrls, cardItems) {
+    let cards = []
+    for (let i = 0; i < cardTitlesAndUrls.length; i++) {
+        let card = {
+            title: cardTitlesAndUrls[i].title,
+            url: cardTitlesAndUrls[i].url,
+            entries: []
+        }
+
+        for (const element of cardItems[i]) {
+            card.entries.push({
+                labelText: element.label,
+                inputText: element.xpath,
+            })
+        }
+
+        cards.push(card)
+    }
+
+    return cards
+}
+
 app.get("/api/getCards", async (req, res) => {
-    const cardTitlesandUrls = await getCardTitlesAndUrls()
-    const cards = await makeCards(cardTitlesandUrls)
+    const cardTitlesAndUrls = await getCardTitlesAndUrls()
+    const cardItems = await getAllCardItems(cardTitlesAndUrls)
+    const cards = makeCards(cardTitlesAndUrls, cardItems)
     res.send({cards: cards})  
             
 })
