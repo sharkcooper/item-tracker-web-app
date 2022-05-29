@@ -11,8 +11,18 @@ class CardList extends React.Component {
         this.state = {
             cards: [],
             isOverlayOpen: false,
-            numCards: 3,
         }
+    }
+
+    getCardsFromDatabase() {
+
+        axios.get("http://localhost:3000/api/getCards").then((response) => {
+            if (response)
+                return response
+            else
+                return []
+        })
+
     }
 
     setIsOverlayOpen(value) {
