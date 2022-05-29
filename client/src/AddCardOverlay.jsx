@@ -60,9 +60,9 @@ export default function AddCardOverlay({open, onClose, addCard}) {
     const [cardItems, setCardItems] = useState([])
     const cardItemRefs = useRef([])
 
-    function addCardHandler(addCard, closeOverlay) {
+    function addCardHandler(addCard, callback) {
         addCard(titleRef.current?.value, urlRef.current?.value, cardItemRefs.current)
-        closeOverlay()
+        callback()
     }
 
     function addCardItem() {

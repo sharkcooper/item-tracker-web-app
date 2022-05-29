@@ -1,10 +1,14 @@
 const path = require('path')
 const express = require('express')
+const bodyParser = require('body-parser')
 const app = express()
 const mysql = require('mysql')
 const dotenv = require('dotenv').config( {
     path: path.join(__dirname, '.env')
 })
+
+app.use(express.json())
+app.use(bodyParser.urlencoded({extended: true}))
 
 const {
     db_host,

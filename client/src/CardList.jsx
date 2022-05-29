@@ -30,7 +30,8 @@ class CardList extends React.Component {
             title: title,
             url: url,
             entries: userInput
-        }        
+        }
+               
         const oldCards = this.state.cards.slice()
         this.setState({
             cards: oldCards.concat(card)
@@ -41,7 +42,7 @@ class CardList extends React.Component {
     getCards() {
         const cardComponents = []
         const curCards = this.state.cards.slice()
-        
+
         curCards.forEach(element => {
             cardComponents.push(<Card key={makeKey()} title={element.title} url={element.url} entries={element.entries}/>)
         })
