@@ -3,6 +3,7 @@ import Card from './Card.jsx'
 import AddCardOverlay from './AddCardOverlay.jsx'
 import { makeKey } from './tools.js'
 import './CardList.css'
+import axios from 'axios';
 
 class CardList extends React.Component {
     constructor(props) {
@@ -20,6 +21,12 @@ class CardList extends React.Component {
         })
     }
 
+    addCardToDatabase(card) {
+        axios.post("http://localhost:3000/api/insertCard", {
+            card: card
+        })
+    }
+
     addCard(title, url, entries) {
         const userInput = entries.map((entry) => ({
             labelText: entry.labelRef.current.value,
@@ -31,6 +38,8 @@ class CardList extends React.Component {
             url: url,
             entries: userInput
         }
+
+        this.addCardToDatabase(card)
                
         const oldCards = this.state.cards.slice()
         this.setState({
