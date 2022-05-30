@@ -14,15 +14,16 @@ class CardList extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.getCardsFromDatabase()
+    }
+
     getCardsFromDatabase() {
-
-        axios.get("http://localhost:3000/api/getCards").then((response) => {
-            if (response)
-                return response
-            else
-                return []
+        axios.get("http://localhost:3000/api/getCards").then(res => {
+            this.setState({
+                cards: res.data.cards
+            })
         })
-
     }
 
     setIsOverlayOpen(value) {
