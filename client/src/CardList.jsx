@@ -36,9 +36,9 @@ class CardList extends React.Component {
         axios.post("http://localhost:3000/api/insertCard", {
             card: card
         }).then(result => {
-            card.id = result.id
+            card.id = result.data.card_id
             for (let i = 0; i < card.entries.length; i++)
-                card.entries[i].id = result.entries[i]
+                card.entries[i].id = result.data.item_ids[i]
 
             const oldCards = this.state.cards.slice()
             this.setState({
