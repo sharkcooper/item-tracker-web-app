@@ -5,6 +5,7 @@ import './Card.css'
 class Card extends React.Component {
     constructor(props) {
         super(props)
+        this.id = props.id
         this.state = {
             title: props.title,
             url: props.url,

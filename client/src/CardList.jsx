@@ -19,7 +19,7 @@ class CardList extends React.Component {
     }
 
     getCardsFromDatabase() {
-        axios.get("http://localhost:3000/api/getCards").then(res => {
+        axios.get("http://localhost:3000/api/getAllCards").then(res => {
             this.setState({
                 cards: res.data.cards
             })
@@ -35,6 +35,15 @@ class CardList extends React.Component {
     addCardToDatabase(card) {
         axios.post("http://localhost:3000/api/insertCard", {
             card: card
+        }).then(result => {
+            card.id = result.id
+            for (let i = 0; i < card.entries.length; i++)
+                card.entries[i].id = result.entries[i]
+
+            const oldCards = this.state.cards.slice()
+            this.setState({
+                cards: oldCards.concat(card)
+            })
         })
     }
 
@@ -51,12 +60,6 @@ class CardList extends React.Component {
         }
 
         this.addCardToDatabase(card)
-               
-        const oldCards = this.state.cards.slice()
-        this.setState({
-            cards: oldCards.concat(card)
-        })
-
     }
 
     getCards() {
@@ -64,7 +67,7 @@ class CardList extends React.Component {
         const curCards = this.state.cards.slice()
 
         curCards.forEach(element => {
-            cardComponents.push(<Card key={makeKey()} title={element.title} url={element.url} entries={element.entries}/>)
+            cardComponents.push(<Card key={makeKey()} id={element.id} title={element.title} url={element.url} entries={element.entries}/>)
         })
 
         return cardComponents

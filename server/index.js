@@ -55,7 +55,6 @@ function getAllCardItems(cardTitlesAndUrls) {
             const items = await getCardItems(element)
             cardItems.push(items)
         }
-        console.log(cardItems)
         resolve(cardItems)
     })
 }
@@ -64,6 +63,7 @@ function makeCards(cardTitlesAndUrls, cardItems) {
     let cards = []
     for (let i = 0; i < cardTitlesAndUrls.length; i++) {
         let card = {
+            id: cardTitlesAndUrls[i].card_id,
             title: cardTitlesAndUrls[i].title,
             url: cardTitlesAndUrls[i].url,
             entries: []
@@ -71,6 +71,7 @@ function makeCards(cardTitlesAndUrls, cardItems) {
 
         for (const element of cardItems[i]) {
             card.entries.push({
+                id: element.item_id,
                 labelText: element.label,
                 inputText: element.xpath,
             })
@@ -78,11 +79,10 @@ function makeCards(cardTitlesAndUrls, cardItems) {
 
         cards.push(card)
     }
-
     return cards
 }
 
-app.get("/api/getCards", async (req, res) => {
+app.get("/api/getAllCards", async (req, res) => {
     const cardTitlesAndUrls = await getCardTitlesAndUrls()
     const cardItems = await getAllCardItems(cardTitlesAndUrls)
     const cards = makeCards(cardTitlesAndUrls, cardItems)
@@ -90,29 +90,36 @@ app.get("/api/getCards", async (req, res) => {
             
 })
 
-app.post("/api/insertCard", (req, res) => {
+app.post("/api/insertCard", async (req, res) => {
     const card = req.body.card
-    console.log(card)
 
-    new Promise((resolve, reject) => {
+    await new Promise((resolve, reject) => {
         const sqlInsertCard = "insert into cards (title, url) values (?, ?)"
         // Insert card title and url
         db.query(sqlInsertCard, [card.title, card.url], (err, result) => {
             if (err) reject(err); 
             resolve(result);
         })
-    }).then(result => {
+    }).then(async result => {
+        let ids = {
+            card_id: result.insertId,
+            item_ids: [],
+        }
+
         const sqlInsertCardItem = "insert into card_items (card_id, label, xpath) values (?, ?, ?)"
         // Insert each card item into database
         for (const element of card.entries) {
             // Insert card item
-            db.query(sqlInsertCardItem, [result.insertId, element.labelText, element.inputText], (err, result) => {
-                if (err) 
-                    console.log(err)
-                else
-                    console.log(result)
+            let item = await new Promise((resolve, reject) => {
+                db.query(sqlInsertCardItem, [result.insertId, element.labelText, element.inputText], (err, result) => {
+                    if (err) reject(err)
+                    resolve(result)
+                })
             })
+            ids.item_ids.push(item.insertId)
         }
+
+        return ids
     }).then(result => {
         res.send(result)
     })
