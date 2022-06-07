@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import CardList from './CardList.jsx';
+import CardList from './components/CardList.jsx';
 
 ReactDOM.render(
     <CardList />,

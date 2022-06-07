@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from './Card.jsx'
 import AddCardOverlay from './AddCardOverlay.jsx'
-import { makeKey } from './tools.js'
+import { makeKey } from '../common/tools'
 import './CardList.css'
 import axios from 'axios';
 

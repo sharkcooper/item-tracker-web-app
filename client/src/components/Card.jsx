@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeKey } from './tools.js';
+import { makeKey } from '../common/tools';
 import './Card.css'
 
 class Card extends React.Component {
