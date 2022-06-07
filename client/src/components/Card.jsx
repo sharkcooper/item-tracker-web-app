@@ -1,10 +1,11 @@
 import React from 'react';
-import { makeKey } from './tools.js';
+import { makeKey } from '../common/tools';
 import './Card.css'
 
 class Card extends React.Component {
     constructor(props) {
         super(props)
+        this.id = props.id
         this.state = {
             title: props.title,
             url: props.url,
