@@ -45,7 +45,7 @@ class Card extends React.Component {
                 this.updateCard(result.data)
             })
             
-        }, 60000)
+        }, 30000)
         return () => clearInterval(interval)
     }
 

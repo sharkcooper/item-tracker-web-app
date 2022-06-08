@@ -14,6 +14,11 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(cors())
 
+const firefoxOptions = {
+    headless: true,
+    executable: '/usr/bin/google-chrome',
+}
+
 const {
     db_host,
     db_username,
@@ -100,7 +105,7 @@ app.post("/api/scrape", async (req, res) => {
         text: [],
     }
 
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch(firefoxOptions)
     const page = await browser.newPage()
     await page.goto(url)
 
