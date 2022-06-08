@@ -91,11 +91,11 @@ app.get("/api/getAllCards", async (req, res) => {
             
 })
 
-app.get("/api/scrape", async (req, res) => {
+app.post("/api/scrape", async (req, res) => {
     const info = req.body.info
     const url = info.url
-    const items = info.items
-
+    const xpaths = info.xpaths
+    console.log(xpaths)
     let results = {
         text: [],
     }
@@ -104,13 +104,20 @@ app.get("/api/scrape", async (req, res) => {
     const page = await browser.newPage()
     await page.goto(url)
 
-    for (const xpath in items) {
-        const [el] = await page.$x(xpath)
+    for (let i = 0; i < xpaths.length; i++) {
+        const [el] = await page.$x(xpaths[i])
+        if (!el) {
+            results.text = results.text.concat("Couldn't Find Item")
+            continue
+        }
         const txt = await el.getProperty('textContent')
-        results.text.concat(await txt.jsonValue())
+        const rawText = await txt.jsonValue();
+        results.text = results.text.concat(rawText)
     }
     
-    res.body.results = results
+    browser.close()
+    console.log(results)
+    res.send(results)
 
 })
 

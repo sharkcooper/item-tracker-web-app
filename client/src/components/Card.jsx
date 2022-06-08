@@ -11,28 +11,41 @@ class Card extends React.Component {
             title: props.title,
             url: props.url,
             entries: props.entries,
-            values: [],
+            values: new Array(props.entries.length),
             expanded: false,
         }
     }
 
-    updateCard(info) {
-        for (let i = 0; i < entries.length; i++) {
+    updateCard(results) {
+        if (!results) return
 
-        }
+        this.setState({
+            values: results.text
+        })
+
     }
 
     componentDidMount() {
         const interval = setInterval(() => {
             let info = {
                 url: this.state.url,
-                items: []
+                xpaths: []
             }
-            axios.get("http://localhost:3000/api/scrape", {info: info}).then(result => {
-                updateCard(result)
+
+            this.state.entries.forEach(element => {
+                info.xpaths = info.xpaths.concat(element.xpath)
             })
             
-        }, 30000)
+            console.log(info)
+            axios.post("http://localhost:3000/api/scrape", {
+                info: info
+            }).then(result => {
+                if (result == null) return
+
+                this.updateCard(result.data)
+            })
+            
+        }, 60000)
         return () => clearInterval(interval)
     }
 
@@ -59,10 +72,10 @@ class Card extends React.Component {
         if (!this.state.expanded)
             return null
 
-        let entries = this.state.entries.map((entry) => (
+        let entries = this.state.entries.map((entry, index) => (
             <div key={makeKey()} className="itemContainer">
                 <div className="labelContainer leftCardItem">{entry.labelText}</div>
-                <div className="valueContainer leftCardItem">{entry.xpath}</div>
+                <div className="valueContainer leftCardItem">{this.state.values[index]}</div>
             </div>
         ))
 
