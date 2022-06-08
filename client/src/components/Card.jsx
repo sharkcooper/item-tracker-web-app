@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 import { makeKey } from '../common/tools';
 import './Card.css'
@@ -10,8 +11,29 @@ class Card extends React.Component {
             title: props.title,
             url: props.url,
             entries: props.entries,
+            values: [],
             expanded: false,
         }
+    }
+
+    updateCard(info) {
+        for (let i = 0; i < entries.length; i++) {
+
+        }
+    }
+
+    componentDidMount() {
+        const interval = setInterval(() => {
+            let info = {
+                url: this.state.url,
+                items: []
+            }
+            axios.get("http://localhost:3000/api/scrape", {info: info}).then(result => {
+                updateCard(result)
+            })
+            
+        }, 30000)
+        return () => clearInterval(interval)
     }
 
     toggleExpand() {
@@ -40,7 +62,7 @@ class Card extends React.Component {
         let entries = this.state.entries.map((entry) => (
             <div key={makeKey()} className="itemContainer">
                 <div className="labelContainer leftCardItem">{entry.labelText}</div>
-                <div className="valueContainer leftCardItem">{entry.inputText}</div>
+                <div className="valueContainer leftCardItem">{entry.xpath}</div>
             </div>
         ))
 

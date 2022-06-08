@@ -8,9 +8,9 @@ class CardItem extends React.Component {
     constructor(props) {
         super(props)
         this.labelText = props.labelText
-        this.inputText = props.inputText
+        this.xpath = props.xpath
         this.labelRef = createRef("")
-        this.inputRef = createRef("")
+        this.xpathRef = createRef("")
     }
 
     render()
@@ -19,8 +19,8 @@ class CardItem extends React.Component {
             <div className="cardItem">
                 <label className="cardItemLabel">{this.labelText}</label>
                 <input ref={this.labelRef} className="labelName"/>
-                <label className="cardItemLabel">{this.inputText}</label>
-                <input ref={this.inputRef} className="xpath"/>
+                <label className="cardItemLabel">{this.xpath}</label>
+                <input ref={this.xpathRef} className="xpath"/>
             </div>
         )
     }
@@ -70,7 +70,7 @@ export default function AddCardOverlay({open, onClose, addCard}) {
                             key={cardItems.length}
                             ref={addCardItemRef} 
                             labelText={"Card Item Name"} 
-                            inputText={"HTML XPath"}>
+                            xpath={"HTML XPath"}>
                         </CardItem>
         const oldItems = cardItems.slice()
         setCardItems(oldItems.concat(newItem))

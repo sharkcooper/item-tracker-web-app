@@ -50,7 +50,7 @@ class CardList extends React.Component {
     addCard(title, url, entries) {
         const userInput = entries.map((entry) => ({
             labelText: entry.labelRef.current.value,
-            inputText: entry.inputRef.current.value
+            xpath: entry.xpathRef.current.value
         }))
 
         const card = {

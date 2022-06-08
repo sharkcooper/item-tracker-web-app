@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const app = express()
 const mysql = require('mysql')
 const { resolve } = require('path')
+const puppeteer = require('puppeteer')
 const dotenv = require('dotenv').config( {
     path: path.join(__dirname, '.env')
 })
@@ -73,7 +74,7 @@ function makeCards(cardTitlesAndUrls, cardItems) {
             card.entries.push({
                 id: element.item_id,
                 labelText: element.label,
-                inputText: element.xpath,
+                xpath: element.xpath,
             })
         }
 
@@ -88,6 +89,29 @@ app.get("/api/getAllCards", async (req, res) => {
     const cards = makeCards(cardTitlesAndUrls, cardItems)
     res.send({cards: cards})  
             
+})
+
+app.get("/api/scrape", async (req, res) => {
+    const info = req.body.info
+    const url = info.url
+    const items = info.items
+
+    let results = {
+        text: [],
+    }
+
+    const browser = await puppeteer.launch()
+    const page = await browser.newPage()
+    await page.goto(url)
+
+    for (const xpath in items) {
+        const [el] = await page.$x(xpath)
+        const txt = await el.getProperty('textContent')
+        results.text.concat(await txt.jsonValue())
+    }
+    
+    res.body.results = results
+
 })
 
 app.post("/api/insertCard", async (req, res) => {
@@ -111,7 +135,7 @@ app.post("/api/insertCard", async (req, res) => {
         for (const element of card.entries) {
             // Insert card item
             let item = await new Promise((resolve, reject) => {
-                db.query(sqlInsertCardItem, [result.insertId, element.labelText, element.inputText], (err, result) => {
+                db.query(sqlInsertCardItem, [result.insertId, element.labelText, element.xpath], (err, result) => {
                     if (err) reject(err)
                     resolve(result)
                 })
